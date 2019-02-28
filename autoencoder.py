@@ -14,11 +14,17 @@ import matplotlib.pyplot as plt
 
 
 # 1 - Import the MNIST data set
-training_set = pd.read_csv("MNIST/bindigit_trn.csv", header = None)
-training_set = np.array(training_set, dtype = "int")
+training_set0 = pd.read_csv("MNIST/bindigit_trn.csv", header = None)
+training_set0 = np.array(training_set0, dtype = "int")
 
-test_set = pd.read_csv("MNIST/bindigit_tst.csv", header = None)
-test_set = np.array(test_set, dtype = "int")
+training_set1 = pd.read_csv("MNIST/targetdigit_trn.csv", header = None)
+#training_set1 = np.array(training_set1, dtype = "int")
+
+test_set0 = pd.read_csv("MNIST/bindigit_tst.csv", header = None)
+test_set0 = np.array(test_set0, dtype = "int")
+
+test_set1 = pd.read_csv("MNIST/targetdigit_tst.csv", header = None)
+#test_set1 = np.array(test_set1, dtype = "int")
 
 
 
@@ -34,15 +40,14 @@ def displayMNIST_alt(image):
     plt.imshow(image, cmap='gray')
     plt.show
 
-#displayMNIST(test_set, 137) # test 0
-
-#displayMNIST_alt(test_set[74, :]) # test 7
+#displayMNIST(training_set0, 137) # test 0
+#displayMNIST(test_set0, 137) # test 0
 
 
 
 # 3 - Convert data sets into Torch tensors
-trn_data = torch.cuda.FloatTensor(training_set)
-tst_data = torch.cuda.FloatTensor(test_set)
+trn_data = torch.cuda.FloatTensor(training_set0)
+tst_data = torch.cuda.FloatTensor(test_set0)
 
 
 
@@ -50,8 +55,8 @@ tst_data = torch.cuda.FloatTensor(test_set)
 class autoenc(nn.Module):
     def __init__(self, ):
         super(autoenc, self).__init__() # inheritence
-        self.full_connection0 = nn.Linear(784, 128) # encoding weights
-        self.full_connection1 = nn.Linear(128, 784) # decoding weights
+        self.full_connection0 = nn.Linear(784, 400) # encoding weights
+        self.full_connection1 = nn.Linear(400, 784) # decoding weights
         self.activation = nn.Sigmoid()
         
     def forward(self, x):
@@ -70,12 +75,14 @@ optimizer = optim.RMSprop(model.parameters(),
 
 
 # 6 - Training the undercomplete autoencoder
-num_epochs = 200
+num_epochs = 20
 length = len(trn_data)
+loss_epoch = []
 
 for epoch in range(num_epochs):
     train_loss = 0
-    score = 0.
+    #score = 0. 
+    
     
     for num_data in range(length):
         input = Variable(trn_data[num_data]).cuda() #.cuda() - to move to GPU
@@ -86,10 +93,23 @@ for epoch in range(num_epochs):
         loss.backward()
         # === calculating epoch loss ===
         train_loss += np.sqrt(loss.item())
-        score += 1.
-        
+        #score += 1. <- add for average loss error instead of total
         optimizer.step()
     
-    print('epoch: ' + str(epoch) + '   loss: ' + str(train_loss/score))
+    #loss_calculated = train_loss/score
+    print('epoch: ' + str(epoch + 1) + '   loss: ' + str(train_loss))
+    loss_epoch.append(train_loss)
+        
+# With 200 epoch and 128 hidden nodes, loss : 0.17136.
 
+
+    
+# 7 - Plot total loss error as function of the epochs
+plt.plot(loss_epoch, label = "Squared L2", )
+plt.legend()
+plt.show()
+
+
+
+# 8 - Test the undercomplete autoencoder
 
