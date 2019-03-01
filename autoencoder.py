@@ -396,6 +396,10 @@ def SparsenessCalc(weights, val):
     weights_s[weights_s < 0] = 1
     return sum(weights_s)/len(weights_s)
 
-SparsenessCalc(weights32, 1e-2)
-
+print("cutoff value: 1e-5")
+print("model 1: " + str(SparsenessCalc(weights12.copy(), 1e-5)))
+print("model 2: " + str(SparsenessCalc(weights22.copy(), 1e-5)))
+print("model 3: " + str(SparsenessCalc(weights32.copy(), 1e-5)))
+sum_sparse = SparsenessCalc(weights12.copy(), 1e-5) + SparsenessCalc(weights22.copy(), 1e-5) + SparsenessCalc(weights32.copy(), 1e-5)
+print("average: " + str(sum_sparse/3))
 
