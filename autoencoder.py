@@ -324,7 +324,7 @@ displayWeights(weights32, 13)
 
 
 # 12.2 - Display all weights of given model
-def displayWeights_alt(weights):
+def displayWeights_full(weights):
     imgs_list = []
     for x_dim in range(20):
         for y_dim in range(20):
@@ -332,10 +332,8 @@ def displayWeights_alt(weights):
                 imgs = weights[:, 0].reshape([28, 28])
             if y_dim == 0 and x_dim > 0:
                 imgs_list.append(imgs)
-                print("x: " + str(x_dim) + "   y: " + str(y_dim))
                 imgs = weights[:, x_dim].reshape([28, 28])
             if y_dim > 0:
-                print("x: " + str(x_dim) + "   y: " + str(y_dim))
                 imgs = np.concatenate((imgs, weights[:, x_dim + y_dim].reshape([28, 28])), axis = 1)
     
     imgs_complete = imgs_list[0]
@@ -346,10 +344,22 @@ def displayWeights_alt(weights):
     
     plt.imshow(imgs_complete, cmap = "gray")
 
-displayWeights_alt(weights12)  # model with 100 nodes
-displayWeights_alt(weights22)  # model with 200 nodes
-displayWeights_alt(weights32)  # model with 400 nodes
+displayWeights_full(weights12)  # model with 100 nodes
+displayWeights_full(weights22)  # model with 200 nodes
+displayWeights_full(weights32)  # model with 400 nodes
 
 
 
 # 13 - Calculate the sparseness of hidden layer representations
+
+def SparsenessCalc(weights, val):
+    weights_s = weights.ravel()
+    weights_s[weights_s > val] = 0
+    weights_s[weights_s < -val] = 0
+    weights_s[weights_s > 0] = 1
+    weights_s[weights_s < 0] = 1
+    return sum(weights_s)/len(weights_s)
+
+SparsenessCalc(weights32, 1e-2)
+
+
