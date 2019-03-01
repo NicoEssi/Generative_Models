@@ -250,6 +250,19 @@ print('n: 400 ; loss: ' + str(loss_calculated))
 
 # 9 - Preprocessing for visualizing reconstructions from each model
 
+# 9.0 - From input
+outputs0_array = []
+outputs0_array.append(test_set0[3])     # add 1
+outputs0_array.append(test_set0[7])     # add 2
+outputs0_array.append(test_set0[0])     # add 3
+outputs0_array.append(test_set0[2])     # add 4
+outputs0_array.append(test_set0[1])     # add 5
+outputs0_array.append(test_set0[14])    # add 6
+outputs0_array.append(test_set0[8])     # add 7
+outputs0_array.append(test_set0[6])     # add 8
+outputs0_array.append(test_set0[5])     # add 9
+outputs0_array.append(test_set0[18])    # add 0
+
 # 9.1 - From model 1
 outputs_array = []
 outputs_array.append(outputs[3].cpu().detach().numpy())     # add 1
@@ -259,9 +272,9 @@ outputs_array.append(outputs[2].cpu().detach().numpy())     # add 4
 outputs_array.append(outputs[1].cpu().detach().numpy())     # add 5
 outputs_array.append(outputs[14].cpu().detach().numpy())    # add 6
 outputs_array.append(outputs[8].cpu().detach().numpy())     # add 7
-outputs_array.append(outputs[7].cpu().detach().numpy())     # add 8
-outputs_array.append(outputs[6].cpu().detach().numpy())     # add 9
-outputs_array.append(outputs[19].cpu().detach().numpy())    # add 0
+outputs_array.append(outputs[6].cpu().detach().numpy())     # add 8
+outputs_array.append(outputs[5].cpu().detach().numpy())     # add 9
+outputs_array.append(outputs[18].cpu().detach().numpy())    # add 0
 
 # 9.2 - From model 2
 outputs2_array = []
@@ -272,9 +285,9 @@ outputs2_array.append(outputs2[2].cpu().detach().numpy())     # add 4
 outputs2_array.append(outputs2[1].cpu().detach().numpy())     # add 5
 outputs2_array.append(outputs2[14].cpu().detach().numpy())    # add 6
 outputs2_array.append(outputs2[8].cpu().detach().numpy())     # add 7
-outputs2_array.append(outputs2[7].cpu().detach().numpy())     # add 8
-outputs2_array.append(outputs2[6].cpu().detach().numpy())     # add 9
-outputs2_array.append(outputs2[19].cpu().detach().numpy())    # add 0
+outputs2_array.append(outputs2[6].cpu().detach().numpy())     # add 8
+outputs2_array.append(outputs2[5].cpu().detach().numpy())     # add 9
+outputs2_array.append(outputs2[18].cpu().detach().numpy())    # add 0
 
 # 9.3 - From model 3
 outputs3_array = []
@@ -285,15 +298,38 @@ outputs3_array.append(outputs3[2].cpu().detach().numpy())     # add 4
 outputs3_array.append(outputs3[1].cpu().detach().numpy())     # add 5
 outputs3_array.append(outputs3[14].cpu().detach().numpy())    # add 6
 outputs3_array.append(outputs3[8].cpu().detach().numpy())     # add 7
-outputs3_array.append(outputs3[7].cpu().detach().numpy())     # add 8
-outputs3_array.append(outputs3[6].cpu().detach().numpy())     # add 9
-outputs3_array.append(outputs3[19].cpu().detach().numpy())    # add 0
+outputs3_array.append(outputs3[6].cpu().detach().numpy())     # add 8
+outputs3_array.append(outputs3[5].cpu().detach().numpy())     # add 9
+outputs3_array.append(outputs3[18].cpu().detach().numpy())    # add 0
 
 
 
 # 10 - Visualize the reconstructions from each model
 
+# 10.1 - Visualization
+img_recon = []
+for ind in range(10):
+    img_rec = np.concatenate((outputs0_array[ind].reshape([28, 28]), 
+                              outputs_array[ind].reshape([28, 28]),
+                              outputs2_array[ind].reshape([28, 28]),
+                              outputs3_array[ind].reshape([28, 28])), axis = 1)
+    plt.imshow(img_rec, cmap = "gray")
+    img_recon.append(img_rec)
 
+img_complete = img_recon[0]
+for app in range(9):
+    img_complete = np.concatenate((img_complete, img_recon[app+1]), axis = 0)
+plt.imshow(img_complete)
+
+
+# 10.2 - Visualization in binary
+def binaryVis(val): # val = cutoff value
+    img_complete_bin = img_complete
+    img_complete_bin[img_complete_bin > val] = 1
+    img_complete_bin[img_complete_bin < val] = 0
+    plt.imshow(img_complete_bin)
+
+binaryVis(0.5)
 
 
 
