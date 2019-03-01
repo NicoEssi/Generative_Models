@@ -191,12 +191,13 @@ plt.show()
 test_loss = 0
 s = 0.
 length = len(tst_data)
-
+outputs = []
 
 for num_data in range (length):
     input = Variable(tst_data[num_data]).cuda()
     # === forward propagation ===
     output = model(input)
+    outputs.append(output)
     loss = criterion(output, tst_data[num_data])
     # === calculating loss ===
     test_loss += np.sqrt(loss.item())
@@ -210,12 +211,13 @@ print('n: 100 ; loss: ' + str(loss_calculated))
 test_loss = 0
 s = 0.
 length = len(tst_data)
-
+outputs2 = []
 
 for num_data in range (length):
     input = Variable(tst_data[num_data]).cuda()
     # === forward propagation ===
     output = model2(input)
+    outputs2.append(output)
     loss = criterion(output, tst_data[num_data])
     # === calculating loss ===
     test_loss += np.sqrt(loss.item())
@@ -229,12 +231,13 @@ print('n: 200 ; loss: ' + str(loss_calculated))
 test_loss = 0
 s = 0.
 length = len(tst_data)
-
+outputs3 = []
 
 for num_data in range (length):
     input = Variable(tst_data[num_data]).cuda()
     # === forward propagation ===
     output = model3(input)
+    outputs3.append(output)
     loss = criterion(output, tst_data[num_data])
     # === calculating loss ===
     test_loss += np.sqrt(loss.item())
@@ -242,3 +245,67 @@ for num_data in range (length):
 
 loss_calculated = test_loss/s
 print('n: 400 ; loss: ' + str(loss_calculated))
+
+
+
+# 9 - Preprocessing for visualizing reconstructions from each model
+
+# 9.1 - From model 1
+outputs_array = []
+outputs_array.append(outputs[3].cpu().detach().numpy())     # add 1
+outputs_array.append(outputs[7].cpu().detach().numpy())     # add 2
+outputs_array.append(outputs[0].cpu().detach().numpy())     # add 3
+outputs_array.append(outputs[2].cpu().detach().numpy())     # add 4
+outputs_array.append(outputs[1].cpu().detach().numpy())     # add 5
+outputs_array.append(outputs[14].cpu().detach().numpy())    # add 6
+outputs_array.append(outputs[8].cpu().detach().numpy())     # add 7
+outputs_array.append(outputs[7].cpu().detach().numpy())     # add 8
+outputs_array.append(outputs[6].cpu().detach().numpy())     # add 9
+outputs_array.append(outputs[19].cpu().detach().numpy())    # add 0
+
+# 9.2 - From model 2
+outputs2_array = []
+outputs2_array.append(outputs2[3].cpu().detach().numpy())     # add 1
+outputs2_array.append(outputs2[7].cpu().detach().numpy())     # add 2
+outputs2_array.append(outputs2[0].cpu().detach().numpy())     # add 3
+outputs2_array.append(outputs2[2].cpu().detach().numpy())     # add 4
+outputs2_array.append(outputs2[1].cpu().detach().numpy())     # add 5
+outputs2_array.append(outputs2[14].cpu().detach().numpy())    # add 6
+outputs2_array.append(outputs2[8].cpu().detach().numpy())     # add 7
+outputs2_array.append(outputs2[7].cpu().detach().numpy())     # add 8
+outputs2_array.append(outputs2[6].cpu().detach().numpy())     # add 9
+outputs2_array.append(outputs2[19].cpu().detach().numpy())    # add 0
+
+# 9.3 - From model 3
+outputs3_array = []
+outputs3_array.append(outputs3[3].cpu().detach().numpy())     # add 1
+outputs3_array.append(outputs3[7].cpu().detach().numpy())     # add 2
+outputs3_array.append(outputs3[0].cpu().detach().numpy())     # add 3
+outputs3_array.append(outputs3[2].cpu().detach().numpy())     # add 4
+outputs3_array.append(outputs3[1].cpu().detach().numpy())     # add 5
+outputs3_array.append(outputs3[14].cpu().detach().numpy())    # add 6
+outputs3_array.append(outputs3[8].cpu().detach().numpy())     # add 7
+outputs3_array.append(outputs3[7].cpu().detach().numpy())     # add 8
+outputs3_array.append(outputs3[6].cpu().detach().numpy())     # add 9
+outputs3_array.append(outputs3[19].cpu().detach().numpy())    # add 0
+
+
+
+# 10 - Visualize the reconstructions from each model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 11 - Transform model weights into matrix arrays
+
+
