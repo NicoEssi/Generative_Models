@@ -297,15 +297,59 @@ outputs3_array.append(outputs3[19].cpu().detach().numpy())    # add 0
 
 
 
-
-
-
-
-
-
-
-
-
 # 11 - Transform model weights into matrix arrays
 
+# 11.1 - Converting weights from first model into arrays
+weights11 = model.full_connection0.weight.data.cpu().detach().numpy()
+weights12 = model.full_connection1.weight.data.cpu().detach().numpy()
 
+# 11.2 - Converting weights from first model into arrays
+weights21 = model2.full_connection0.weight.data.cpu().detach().numpy()
+weights22 = model2.full_connection1.weight.data.cpu().detach().numpy()
+
+# 11.3 - Converting weights from first model into arrays
+weights31 = model3.full_connection0.weight.data.cpu().detach().numpy()
+weights32 = model3.full_connection1.weight.data.cpu().detach().numpy()
+
+
+
+# 12 - Display weights
+
+# 12.1 - Display individual weight at specified index
+def displayWeights(weights, index):
+    weights = weights[:, index].reshape([28, 28])
+    plt.imshow(weights, cmap='gray')
+    plt.show
+displayWeights(weights32, 13)
+
+
+# 12.2 - Display all weights of given model
+def displayWeights_alt(weights):
+    imgs_list = []
+    for x_dim in range(20):
+        for y_dim in range(20):
+            if y_dim == 0 and x_dim == 0:
+                imgs = weights[:, 0].reshape([28, 28])
+            if y_dim == 0 and x_dim > 0:
+                imgs_list.append(imgs)
+                print("x: " + str(x_dim) + "   y: " + str(y_dim))
+                imgs = weights[:, x_dim].reshape([28, 28])
+            if y_dim > 0:
+                print("x: " + str(x_dim) + "   y: " + str(y_dim))
+                imgs = np.concatenate((imgs, weights[:, x_dim + y_dim].reshape([28, 28])), axis = 1)
+    
+    imgs_complete = imgs_list[0]
+    for x_dim2 in range(19):
+        print(len(imgs_complete))
+        print(len(imgs_list[x_dim2]))
+        imgs_complete = np.concatenate((imgs_complete, imgs_list[x_dim2]), axis = 0)
+    
+    plt.imshow(imgs_complete, cmap = "gray")
+
+displayWeights_alt(weights12)  # model with 100 nodes
+displayWeights_alt(weights22)  # model with 200 nodes
+displayWeights_alt(weights32)  # model with 400 nodes
+
+
+
+# 13 - Calculate the sparseness of hidden layer representations
