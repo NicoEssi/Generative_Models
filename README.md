@@ -1,2 +1,2 @@
-# Undercomplete_Autoencoder
-An implementation of an undercomplete autoencoder applied to MNIST data set.
+# Generative_Models
+Implementation of several generative models (currently only undercomplete autoencoder).
